@@ -12,11 +12,7 @@ const faqs = [
   },
   {
     q: "¿Cuánto dura cada masaje?",
-    a: "La duración puede variar según el tratamiento. En cada tarjeta figura 'Duración: Consultar' hasta que se actualice con la información confirmada."
-  },
-  {
-    q: "¿Cuánto cuesta?",
-    a: "Los precios se indican como 'Consultar'. Podés consultarnos por WhatsApp y te pasamos el valor actualizado."
+    a: "La duración puede variar según el tratamiento. En cada tarjeta figura la información correspondiente."
   },
   {
     q: "¿Cómo me preparo para mi turno?",
