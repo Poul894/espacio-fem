@@ -39,12 +39,6 @@ const ContactoFinal = () => {
                 <p className="font-script text-2xl text-violet">{siteConfig.closingPhrase} ♡</p>
               </div>
             </div>
-            <div className="relative">
-              <div className="absolute -inset-6 rounded-[40px] bg-gradient-to-br from-pink-soft/25 to-lavender/20 blur-3xl" aria-hidden="true"></div>
-              <div className="relative overflow-hidden rounded-[40px]">
-                <img src="/assets/flyer-servicios.jpeg" alt="Espacio Fem - Contacto" className="h-[420px] w-full object-cover" loading="lazy" />
-              </div>
-            </div>
           </div>
         </div>
       </div>

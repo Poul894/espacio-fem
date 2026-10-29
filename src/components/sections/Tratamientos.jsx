@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { services } from "../../data/services";
 import { HeartIcon } from "../ui/Icons";
 
 const Tratamientos = () => {
   const [selected, setSelected] = useState(services[0] || null);
+  const detailRef = useRef(null);
 
   const handleReservar = (service) => {
     if (typeof window === "undefined") return;
@@ -12,6 +13,15 @@ const Tratamientos = () => {
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  };
+
+  const handleSelect = (service) => {
+    setSelected(service);
+    requestAnimationFrame(() => {
+      if (detailRef.current) {
+        detailRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
   };
 
   const siteConfigWhatsapp = (service) => {
@@ -32,26 +42,26 @@ const Tratamientos = () => {
             Elegí uno para ver el detalle y reservar.
           </p>
         </div>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="mt-8 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {services.map((service) => (
             <button
               key={service.id}
-              onClick={() => setSelected(service)}
-              className={`group relative flex flex-col overflow-hidden rounded-[18px] border text-left shadow-[0_30px_70px_-60px_rgba(81,38,83,0.9)] transition-all ${selected?.id === service.id ? "border-violet/70 ring-1 ring-violet/40" : "border-pink-soft/40 hover:-translate-y-1"}`}
+              onClick={() => handleSelect(service)}
+              className={`group relative flex flex-col overflow-hidden rounded-[16px] border text-left shadow-[0_30px_70px_-60px_rgba(81,38,83,0.9)] transition-all ${selected?.id === service.id ? "border-violet/70 ring-1 ring-violet/40" : "border-pink-soft/40 hover:-translate-y-1"}`}
             >
-              <div className="relative h-36 w-full">
+              <div className="relative h-32 w-full">
                 <img src={service.image} alt={service.name} className="h-full w-full object-cover object-center" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-plum/25 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-plum/28 to-transparent"></div>
               </div>
-              <div className="flex flex-col gap-1 bg-cream-50/90 px-3 py-2">
-                <p className="text-sm font-medium text-plum line-clamp-2">{service.name}</p>
-                <p className="text-xs uppercase tracking-[0.28em] text-violet-deep">{service.price}</p>
+              <div className="flex flex-col gap-0.5 bg-cream-50/95 px-2.5 py-1.5">
+                <p className="text-xs font-medium text-plum line-clamp-2">{service.name}</p>
+                <p className="text-[10px] uppercase tracking-[0.28em] text-violet-deep">{service.price}</p>
               </div>
             </button>
           ))}
         </div>
         {selected && (
-          <div className="mt-8 card-soft grid gap-6 overflow-hidden p-0 lg:grid-cols-[1.1fr_1fr]">
+          <div ref={detailRef} className="mt-8 card-soft grid gap-6 overflow-hidden p-0 lg:grid-cols-[1.1fr_1fr]">
             <div className="relative h-64 w-full lg:h-full">
               <img src={selected.image} alt={selected.name} className="h-full w-full object-cover object-center" loading="lazy" />
               <div className="absolute inset-0 bg-gradient-to-t from-plum/18 to-transparent"></div>
@@ -70,7 +80,6 @@ const Tratamientos = () => {
                 ))}
               </div>
               <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.35em] text-violet-deep">
-                <span>Duración: {selected.duration}</span>
                 <span>Precio: {selected.price}</span>
               </div>
               <div className="mt-auto flex flex-wrap items-center gap-3">
