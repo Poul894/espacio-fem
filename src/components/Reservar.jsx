@@ -208,7 +208,7 @@ const Reservar = () => {
           )}
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
             <button onClick={prev} disabled={step === 0} className="btn-secondary disabled:opacity-40">Volver</button>
-            {step < 4 ? (
+            {step < 3 ? (
               <button onClick={next} disabled={!canNext()} className="btn-primary disabled:opacity-40">Siguiente</button>
             ) : (
               <button onClick={confirmar} className="btn-primary">Confirmar y enviar por WhatsApp <HeartIcon className="h-4 w-4" /></button>
