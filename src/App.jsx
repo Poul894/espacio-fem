@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Header from "./components/Header";
 import HeroPremium from "./components/sections/HeroPremium";
 import Tratamientos from "./components/sections/Tratamientos";
+import VideosYoutube from "./components/sections/VideosYoutube";
 import Masajes from "./components/Masajes";
 import EncontrarMasaje from "./components/sections/EncontrarMasaje";
 import BeneficiosPremium from "./components/sections/BeneficiosPremium";
@@ -33,6 +34,7 @@ function App() {
       <main>
         <HeroPremium />
         <Tratamientos />
+        <VideosYoutube />
         <Masajes />
         <EncontrarMasaje />
         <BeneficiosPremium />
