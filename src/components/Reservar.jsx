@@ -4,7 +4,7 @@ import { siteConfig } from "../data/config";
 import { openReservaWhatsApp } from "../utils/whatsapp";
 import { HeartIcon, LotusIcon } from "./ui/Icons";
 
-const steps = ["Elegir masaje", "Elegir fecha", "Elegir horario", "Tus datos", "Confirmar"];
+const steps = ["Elegir fecha", "Elegir horario", "Tus datos", "Confirmar"];
 
 const getTodayISO = () => {
   const d = new Date();
@@ -69,15 +69,14 @@ const Reservar = () => {
   };
 
   const canNext = () => {
-    if (step === 0) return Boolean(serviceId);
-    if (step === 1) return Boolean(fecha) && !isDateDisabled(fecha);
-    if (step === 2) return Boolean(hora) && !isHoraOcupada(fecha, hora);
-    if (step === 3) return nombre.trim().length >= 2;
+    if (step === 0) return Boolean(fecha) && !isDateDisabled(fecha);
+    if (step === 1) return Boolean(hora) && !isHoraOcupada(fecha, hora);
+    if (step === 2) return nombre.trim().length >= 2;
     return true;
   };
 
   const next = () => {
-    if (step < 4 && canNext()) setStep((s) => s + 1);
+    if (step < 3 && canNext()) setStep((s) => s + 1);
   };
   const prev = () => {
     if (step > 0) setStep((s) => s - 1);
@@ -112,7 +111,10 @@ const Reservar = () => {
           <h2 className="section-title">Reservar turno</h2>
         </div>
         <div className="mt-6 text-center">
-          <p className="text-plum-light">Elegí tu masaje, fecha y horario. Te redirigimos a WhatsApp para confirmar.</p>
+          <p className="text-plum-light">Elegí fecha, horario y completá tus datos. Te redirigimos a WhatsApp para confirmar.</p>
+        </div>
+        <div className="mt-4 text-center text-sm text-plum-light">
+          <p><span className="text-plum">Masaje seleccionado:</span> {service?.name} · {service?.price}</p>
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-xs uppercase tracking-[0.3em] text-plum-light">
           {steps.map((s, idx) => (
@@ -128,25 +130,7 @@ const Reservar = () => {
         <div className="card-soft mt-8 p-6 sm:p-8">
           {step === 0 && (
             <div className="flex flex-col gap-4">
-              <h3 className="font-display text-2xl text-plum">Paso 1: Elegí tu masaje</h3>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {services.map((s) => (
-                  <button
-                    key={s.id}
-                    onClick={() => setServiceId(s.id)}
-                    className={`flex flex-col items-start gap-1 rounded-card border px-4 py-3 text-left transition-all ${serviceId === s.id ? "border-violet bg-violet/10" : "border-pink-soft hover:border-violet/60"}`}
-                  >
-                    <span className="font-medium text-plum">{s.name}</span>
-                    <span className="text-sm text-plum-light">{s.short.join(" · ")}</span>
-                    <span className="text-xs uppercase tracking-[0.25em] text-violet">Duración: {s.duration} · Precio: {s.price}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-          {step === 1 && (
-            <div className="flex flex-col gap-4">
-              <h3 className="font-display text-2xl text-plum">Paso 2: Elegí fecha</h3>
+              <h3 className="font-display text-2xl text-plum">Paso 1: Elegí fecha</h3>
               <input
                 type="date"
                 min={today}
