@@ -148,7 +148,7 @@ const Reservar = () => {
               <p className="text-xs text-plum-light">Días de atención: Lunes a Sábado (configurable desde config.js).</p>
             </div>
           )}
-          {step === 2 && (
+          {step === 1 && (
             <div className="flex flex-col gap-4">
               <h3 className="font-display text-2xl text-plum">Paso 2: Elegí horario</h3>
               <p className="text-sm text-plum-light">Fecha: <span className="text-plum">{fecha || "—"}</span></p>
@@ -171,7 +171,7 @@ const Reservar = () => {
               {!fecha && <p className="text-sm text-plum-light">Primero elegí una fecha.</p>}
             </div>
           )}
-          {step === 3 && (
+          {step === 2 && (
             <div className="flex flex-col gap-4">
               <h3 className="font-display text-2xl text-plum">Paso 3: Tus datos</h3>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -190,7 +190,7 @@ const Reservar = () => {
               </label>
             </div>
           )}
-          {step === 4 && (
+          {step === 3 && (
             <div className="flex flex-col gap-4">
               <h3 className="font-display text-2xl text-plum">Paso 4: Resumen y confirmación</h3>
               <div className="rounded-card border border-pink-soft bg-white/60 p-4 text-sm text-plum-light">
