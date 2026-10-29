@@ -6,11 +6,11 @@ export const siteConfig = {
   exclusive: "Espacio exclusivo para mujeres",
   whatsappNumber: "5491151354124",
   whatsappUrl: "https://wa.me/5491151354124",
-  instagram: "https://instagram.com/",
-  addressNote: "Consultar ubicación al reservar",
+  instagram: "",
+  addressNote: "Ubicación: Ranelagh. A metros del colegio San Pedro Pascual.",
   horarios: {
-    diasAtencion: [1, 2, 3, 4, 5, 6], // 0=Domingo,1=Lunes,...,6=Sabado
-    diasSinAtencion: [], // ['2025-10-12'] etc
+    diasAtencion: [1, 2, 3, 4, 5, 6],
+    diasSinAtencion: [],
     turnosPorHora: [
       "09:00",
       "10:00",

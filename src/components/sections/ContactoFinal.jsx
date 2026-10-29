@@ -30,10 +30,8 @@ const ContactoFinal = () => {
                   </a>
                 </div>
                 <div className="rounded-card border border-pink-soft/40 bg-cream-50/80 p-4">
-                  <p className="text-sm uppercase tracking-[0.35em] text-violet-deep">Instagram</p>
-                  <a href={siteConfig.instagram} target="_blank" rel="noopener noreferrer" className="mt-2 block text-lg text-plum hover:text-violet-deep">
-                    (placeholder)
-                  </a>
+                  <p className="text-sm uppercase tracking-[0.35em] text-violet-deep">Ubicación</p>
+                  <p className="mt-2 block text-lg text-plum">{siteConfig.addressNote}</p>
                 </div>
               </div>
               <div className="mt-6 flex items-center gap-3">

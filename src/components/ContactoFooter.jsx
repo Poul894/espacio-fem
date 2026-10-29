@@ -41,7 +41,6 @@ const ContactoFooter = () => {
             <WhatsAppIcon className="h-5 w-5" />
             WhatsApp {siteConfig.whatsappNumber.replace("549", "15")}
           </a>
-          <a href={siteConfig.instagram} target="_blank" rel="noopener noreferrer" className="text-sm text-plum-light hover:text-violet-deep">Instagram (placeholder)</a>
           <p className="text-xs text-plum-light">{siteConfig.addressNote}</p>
         </div>
       </div>
