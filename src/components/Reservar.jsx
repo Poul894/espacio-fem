@@ -150,7 +150,7 @@ const Reservar = () => {
           )}
           {step === 2 && (
             <div className="flex flex-col gap-4">
-              <h3 className="font-display text-2xl text-plum">Paso 3: Elegí horario</h3>
+              <h3 className="font-display text-2xl text-plum">Paso 2: Elegí horario</h3>
               <p className="text-sm text-plum-light">Fecha: <span className="text-plum">{fecha || "—"}</span></p>
               <div className="flex flex-wrap gap-2">
                 {horarios.map((h) => {
@@ -173,7 +173,7 @@ const Reservar = () => {
           )}
           {step === 3 && (
             <div className="flex flex-col gap-4">
-              <h3 className="font-display text-2xl text-plum">Paso 4: Tus datos</h3>
+              <h3 className="font-display text-2xl text-plum">Paso 3: Tus datos</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="flex flex-col gap-1 text-sm text-plum-light">
                   Nombre y apellido *
@@ -192,7 +192,7 @@ const Reservar = () => {
           )}
           {step === 4 && (
             <div className="flex flex-col gap-4">
-              <h3 className="font-display text-2xl text-plum">Paso 5: Resumen y confirmación</h3>
+              <h3 className="font-display text-2xl text-plum">Paso 4: Resumen y confirmación</h3>
               <div className="rounded-card border border-pink-soft bg-white/60 p-4 text-sm text-plum-light">
                 <div className="grid gap-2 sm:grid-cols-2">
                   <p><span className="text-plum">Masaje:</span> {service?.name}</p>
