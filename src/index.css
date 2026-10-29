@@ -203,16 +203,17 @@ img {
     position: relative;
     overflow: hidden;
     border-radius: var(--radius-card-lg);
-    border: 1px solid rgba(233, 169, 197, 0.4);
-    background: linear-gradient(180deg, rgba(255, 252, 250, 0.98) 0%, rgba(250, 245, 239, 0.95) 100%);
-    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(233, 169, 197, 0.35);
+    background: radial-gradient(circle at top, rgba(233, 169, 197, 0.12), transparent 60%), linear-gradient(180deg, rgba(255, 252, 250, 0.98) 0%, rgba(250, 245, 239, 0.96) 100%);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 40px 80px -60px rgba(81, 38, 83, 0.9);
     transition: all 400ms ease;
   }
 
   .card-soft:hover {
     transform: translateY(-6px);
-    box-shadow: var(--shadow-soft);
-    border-color: rgba(148, 87, 162, 0.5);
+    box-shadow: 0 50px 90px -60px rgba(148, 87, 162, 0.8);
+    border-color: rgba(148, 87, 162, 0.6);
   }
 
   .decor-leaf {

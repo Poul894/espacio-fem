@@ -21,10 +21,10 @@ const Tratamientos = () => {
     <section id="tratamientos" className="relative py-14 sm:py-16 lg:py-20">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-pill border border-violet/40 px-5 py-1 text-[10px] uppercase tracking-[0.4em] text-violet-deep">
+          <span className="mb-4 inline-flex items-center gap-2 rounded-pill border border-violet/50 px-5 py-1 text-[10px] uppercase tracking-[0.4em] text-violet-deep shadow-[0_12px_40px_-18px_rgba(148,87,162,0.8)]">
             Tratamientos
           </span>
-          <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] leading-tight text-plum">Tratamientos y masajes</h2>
+          <h2 className="font-display text-[clamp(2.2rem,5vw,3.8rem)] leading-tight text-plum drop-shadow-[0_18px_50px_rgba(81,38,83,0.12)]">Tratamientos y masajes</h2>
           <p className="mt-3 max-w-2xl text-base text-plum-light sm:text-lg">
             Masajes descontracturantes, estéticos y relajantes, diseñados especialmente para vos.
           </p>

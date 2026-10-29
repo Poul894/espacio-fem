@@ -8,6 +8,7 @@ import EncontrarMasaje from "./components/sections/EncontrarMasaje";
 import BeneficiosPremium from "./components/sections/BeneficiosPremium";
 import SobreEspacio from "./components/sections/SobreEspacio";
 import PasosReserva from "./components/sections/PasosReserva";
+import Testimonios from "./components/sections/Testimonios";
 import Reservar from "./components/Reservar";
 import PreguntasFrecuentes from "./components/sections/PreguntasFrecuentes";
 import ContactoFinal from "./components/sections/ContactoFinal";
@@ -40,6 +41,7 @@ function App() {
         <BeneficiosPremium />
         <SobreEspacio />
         <PasosReserva />
+        <Testimonios />
         <Reservar />
         <PreguntasFrecuentes />
         <ContactoFinal />
