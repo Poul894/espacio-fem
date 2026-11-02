@@ -3,6 +3,7 @@ import { services } from "../data/services";
 import { siteConfig } from "../data/config";
 import { openReservaWhatsApp } from "../utils/whatsapp";
 import { HeartIcon, LotusIcon } from "./ui/Icons";
+import { supabase, hasSupabase } from "../lib/supabase";
 
 const steps = ["Elegir fecha", "Elegir horario", "Tus datos", "Confirmar"];
 
@@ -22,10 +23,30 @@ const Reservar = () => {
   const [telefono, setTelefono] = useState("");
   const [comentario, setComentario] = useState("");
   const [ocupados, setOcupados] = useState({});
+  const [saving, setSaving] = useState(false);
 
   const service = useMemo(() => services.find((s) => s.id === serviceId) || services[0], [serviceId]);
 
-  useEffect(() => {
+  const loadBookings = async () => {
+    if (hasSupabase && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from("bookings")
+          .select("date, time")
+          .neq("status", "cancelled");
+        if (!error && data) {
+          const map = {};
+          for (const b of data) {
+            if (!map[b.date]) map[b.date] = [];
+            map[b.date].push(b.time);
+          }
+          setOcupados(map);
+          return;
+        }
+      } catch (e) {
+        // fallback to localStorage
+      }
+    }
     try {
       const saved = localStorage.getItem("espaciofem:reservas");
       if (saved) {
@@ -34,6 +55,10 @@ const Reservar = () => {
     } catch (e) {
       // ignore
     }
+  };
+
+  useEffect(() => {
+    loadBookings();
   }, []);
 
   useEffect(() => {
@@ -82,17 +107,44 @@ const Reservar = () => {
     if (step > 0) setStep((s) => s - 1);
   };
 
-  const confirmar = () => {
+  const confirmar = async () => {
     if (!nombre.trim() || !fecha || !hora || !service) return;
+    if (saving) return;
+    setSaving(true);
+
     const key = fecha;
     const updated = { ...ocupados };
     updated[key] = Array.from(new Set([...(updated[key] || []), hora]));
     setOcupados(updated);
+
     try {
       localStorage.setItem("espaciofem:reservas", JSON.stringify(updated));
     } catch (e) {
       // ignore
     }
+
+    if (hasSupabase && supabase) {
+      try {
+        const { error } = await supabase.from("bookings").insert({
+          service_id: service.id,
+          service_name: service.name,
+          date: fecha,
+          time: hora,
+          name: nombre.trim(),
+          phone: telefono.trim() || null,
+          comment: comentario.trim() || null,
+          status: "pending"
+        });
+        if (error) {
+          // if conflict, just keep going to WhatsApp but could show message
+          console.warn(error);
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    setSaving(false);
     openReservaWhatsApp({
       nombre: nombre.trim(),
       telefono: telefono.trim(),
@@ -203,7 +255,7 @@ const Reservar = () => {
                 </div>
                 {comentario && <p className="mt-2"><span className="text-plum">Comentario:</span> {comentario}</p>}
               </div>
-              <p className="text-sm text-plum-light">Al confirmar, guardamos el turno (en este dispositivo) y te abrimos WhatsApp con el mensaje prellenado.</p>
+              <p className="text-sm text-plum-light">Al confirmar, guardamos el turno y te abrimos WhatsApp con el mensaje prellenado.</p>
             </div>
           )}
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
@@ -211,7 +263,7 @@ const Reservar = () => {
             {step < 3 ? (
               <button onClick={next} disabled={!canNext()} className="btn-primary disabled:opacity-40">Siguiente</button>
             ) : (
-              <button onClick={confirmar} className="btn-primary">Confirmar y enviar por WhatsApp <HeartIcon className="h-4 w-4" /></button>
+              <button onClick={confirmar} disabled={saving} className="btn-primary disabled:opacity-40">{saving ? "Guardando..." : "Confirmar y enviar por WhatsApp"} <HeartIcon className="h-4 w-4" /></button>
             )}
           </div>
         </div>
