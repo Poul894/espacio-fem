@@ -1,4 +1,6 @@
-import { videos } from "../../data/videos";
+import { useEffect, useState } from "react";
+import { videos as videosData } from "../../data/videos";
+import { supabase, hasSupabase } from "../../lib/supabase";
 
 const getEmbedUrl = (video) => {
   if (video.url) {
@@ -21,6 +23,23 @@ const getEmbedUrl = (video) => {
 };
 
 const VideosYoutube = () => {
+  const [videos, setVideos] = useState(videosData);
+
+  useEffect(() => {
+    const load = async () => {
+      if (!hasSupabase || !supabase) return;
+      try {
+        const { data } = await supabase.from("settings").select("key,value").eq("key", "videos").maybeSingle();
+        if (data && Array.isArray(data.value) && data.value.length > 0) {
+          setVideos(data.value);
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+    load();
+  }, []);
+
   if (!videos || videos.length === 0) return null;
 
   return (

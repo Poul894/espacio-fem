@@ -25,6 +25,12 @@ const Reservar = () => {
   const [ocupados, setOcupados] = useState({});
   const [saving, setSaving] = useState(false);
 
+  const [availability, setAvailability] = useState({
+    diasAtencion: siteConfig.horarios.diasAtencion || [1,2,3,4,5,6],
+    diasSinAtencion: siteConfig.horarios.diasSinAtencion || [],
+    turnosPorHora: siteConfig.horarios.turnosPorHora || []
+  });
+
   const service = useMemo(() => services.find((s) => s.id === serviceId) || services[0], [serviceId]);
 
   const loadBookings = async () => {
@@ -41,7 +47,6 @@ const Reservar = () => {
             map[b.date].push(b.time);
           }
           setOcupados(map);
-          return;
         }
       } catch (e) {
         // fallback to localStorage
@@ -49,7 +54,7 @@ const Reservar = () => {
     }
     try {
       const saved = localStorage.getItem("espaciofem:reservas");
-      if (saved) {
+      if (saved && Object.keys(ocupados).length === 0) {
         setOcupados(JSON.parse(saved));
       }
     } catch (e) {
@@ -57,8 +62,22 @@ const Reservar = () => {
     }
   };
 
+  const loadAvailability = async () => {
+    if (hasSupabase && supabase) {
+      try {
+        const { data } = await supabase.from("settings").select("key,value").eq("key", "availability").maybeSingle();
+        if (data && data.value) {
+          setAvailability((prev) => ({ ...prev, ...data.value }));
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+  };
+
   useEffect(() => {
     loadBookings();
+    loadAvailability();
   }, []);
 
   useEffect(() => {
@@ -75,9 +94,9 @@ const Reservar = () => {
   }, []);
 
   const today = getTodayISO();
-  const horarios = siteConfig.horarios.turnosPorHora;
-  const diasSinAtencion = new Set(siteConfig.horarios.diasSinAtencion || []);
-  const diasAtencion = siteConfig.horarios.diasAtencion || [1,2,3,4,5,6];
+  const horarios = availability.turnosPorHora || siteConfig.horarios.turnosPorHora;
+  const diasSinAtencion = new Set(availability.diasSinAtencion || []);
+  const diasAtencion = availability.diasAtencion || [1,2,3,4,5,6];
 
   const isDateDisabled = (isoDate) => {
     if (!isoDate) return true;
