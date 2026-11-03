@@ -40,7 +40,7 @@ const Admin = () => {
 
   const load = async () => {
     if (!hasSupabase || !supabase) {
-      setError("Falta configurar Supabase");
+      setError(`Falta configurar Supabase (url: ${import.meta.env.VITE_SUPABASE_URL ? "ok" : "no"}, key: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? "ok" : "no"})`);
       return;
     }
     setLoading(true);
