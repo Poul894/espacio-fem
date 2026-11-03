@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { services } from "../data/services";
 import { siteConfig } from "../data/config";
-import { openReservaWhatsApp } from "../utils/whatsapp";
 import { HeartIcon, LotusIcon } from "./ui/Icons";
 import { supabase, hasSupabase } from "../lib/supabase";
 
@@ -14,6 +13,12 @@ const getTodayISO = () => {
   return new Date(d.getTime() - tzOffset).toISOString().split("T")[0];
 };
 
+const parsePrice = (priceStr) => {
+  if (!priceStr) return 0;
+  const num = priceStr.replace(/[^0-9]/g, "");
+  return parseInt(num, 10) || 0;
+};
+
 const Reservar = () => {
   const [step, setStep] = useState(0);
   const [serviceId, setServiceId] = useState(services[0]?.id || "");
@@ -24,6 +29,8 @@ const Reservar = () => {
   const [comentario, setComentario] = useState("");
   const [ocupados, setOcupados] = useState({});
   const [saving, setSaving] = useState(false);
+  const [showSenia, setShowSenia] = useState(false);
+  const [bookingId, setBookingId] = useState(null);
 
   const [availability, setAvailability] = useState({
     diasAtencion: siteConfig.horarios.diasAtencion || [1,2,3,4,5,6],
@@ -31,25 +38,39 @@ const Reservar = () => {
     turnosPorHora: siteConfig.horarios.turnosPorHora || []
   });
 
+  const [seniaConfig, setSeniaConfig] = useState({
+    alias: "CAMBIAR_ALIAS_AQUI",
+    titulo: "Seña para reservar tu turno",
+    texto: "Para confirmar tu turno debés enviar el 50% del valor por transferencia al siguiente alias. Si no se recibe la seña dentro de los próximos 10 minutos, el turno se libera automáticamente.",
+    mostrar_whatsapp: false
+  });
+
   const service = useMemo(() => services.find((s) => s.id === serviceId) || services[0], [serviceId]);
+  const priceNum = useMemo(() => parsePrice(service?.price), [service]);
+  const seniaAmount = useMemo(() => Math.round(priceNum / 2), [priceNum]);
 
   const loadBookings = async () => {
     if (hasSupabase && supabase) {
       try {
         const { data, error } = await supabase
           .from("bookings")
-          .select("date, time")
-          .neq("status", "cancelled");
+          .select("date, time, status, hold_expires_at")
+          .or("status.eq.pending,status.eq.held,status.eq.confirmed");
         if (!error && data) {
           const map = {};
+          const now = new Date();
           for (const b of data) {
+            if (b.status === "cancelled") continue;
+            if (b.status === "held" && b.hold_expires_at) {
+              if (new Date(b.hold_expires_at) < now) continue;
+            }
             if (!map[b.date]) map[b.date] = [];
             map[b.date].push(b.time);
           }
           setOcupados(map);
         }
       } catch (e) {
-        // fallback to localStorage
+        // fallback
       }
     }
     try {
@@ -75,10 +96,28 @@ const Reservar = () => {
     }
   };
 
+  const loadSenia = async () => {
+    if (hasSupabase && supabase) {
+      try {
+        const { data } = await supabase.from("settings").select("key,value").eq("key", "senia").maybeSingle();
+        if (data && data.value) {
+          setSeniaConfig((prev) => ({ ...prev, ...data.value }));
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+  };
+
   useEffect(() => {
     loadBookings();
     loadAvailability();
+    loadSenia();
   }, []);
+
+  useEffect(() => {
+    loadBookings();
+  }, [step, fecha]);
 
   useEffect(() => {
     const handler = (e) => {
@@ -131,6 +170,7 @@ const Reservar = () => {
     if (saving) return;
     setSaving(true);
 
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
     const key = fecha;
     const updated = { ...ocupados };
     updated[key] = Array.from(new Set([...(updated[key] || []), hora]));
@@ -144,7 +184,7 @@ const Reservar = () => {
 
     if (hasSupabase && supabase) {
       try {
-        const { error } = await supabase.from("bookings").insert({
+        const { data, error } = await supabase.from("bookings").insert({
           service_id: service.id,
           service_name: service.name,
           date: fecha,
@@ -152,11 +192,57 @@ const Reservar = () => {
           name: nombre.trim(),
           phone: telefono.trim() || null,
           comment: comentario.trim() || null,
-          status: "pending"
-        });
-        if (error) {
-          // if conflict, just keep going to WhatsApp but could show message
-          console.warn(error);
+          status: "held",
+          hold_expires_at: expiresAt
+        }).select().single();
+        if (!error && data) {
+          setBookingId(data.id);
+        }
+
+        // guardar/actualizar cliente
+        if (telefono.trim()) {
+          const { data: existing } = await supabase.from("clients").select("id, notes").eq("phone", telefono.trim()).maybeSingle();
+          if (existing) {
+            await supabase.from("clients").update({
+              name: nombre.trim(),
+              last_booking_date: fecha,
+              last_booking_time: hora,
+              last_service: service.name,
+              last_service_id: service.id,
+              updated_at: new Date().toISOString()
+            }).eq("id", existing.id);
+          } else {
+            await supabase.from("clients").insert({
+              name: nombre.trim(),
+              phone: telefono.trim(),
+              last_booking_date: fecha,
+              last_booking_time: hora,
+              last_service: service.name,
+              last_service_id: service.id,
+              notes: []
+            });
+          }
+        } else {
+          const { data: existing } = await supabase.from("clients").select("id").ilike("name", nombre.trim()).limit(1).maybeSingle();
+          if (existing) {
+            await supabase.from("clients").update({
+              last_booking_date: fecha,
+              last_booking_time: hora,
+              last_service: service.name,
+              last_service_id: service.id,
+              updated_at: new Date().toISOString()
+            }).eq("id", existing.id);
+          } else {
+            await supabase.from("clients").insert({
+              name: nombre.trim(),
+              phone: null,
+              last_booking_date: fecha,
+              last_booking_time: hora,
+              last_service: service.name,
+              last_service_id: service.id,
+              notes: []
+            });
+          }
         }
       } catch (e) {
         console.warn(e);
@@ -164,14 +250,7 @@ const Reservar = () => {
     }
 
     setSaving(false);
-    openReservaWhatsApp({
-      nombre: nombre.trim(),
-      telefono: telefono.trim(),
-      masaje: service.name,
-      fecha,
-      hora,
-      comentario
-    });
+    setShowSenia(true);
   };
 
   return (
@@ -274,7 +353,7 @@ const Reservar = () => {
                 </div>
                 {comentario && <p className="mt-2"><span className="text-plum">Comentario:</span> {comentario}</p>}
               </div>
-              <p className="text-sm text-plum-light">Al confirmar, guardamos el turno y te abrimos WhatsApp con el mensaje prellenado.</p>
+              <p className="text-sm text-plum-light">Al confirmar se reservará el turno por 10 minutos para que puedas enviar la seña.</p>
             </div>
           )}
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
@@ -282,11 +361,41 @@ const Reservar = () => {
             {step < 3 ? (
               <button onClick={next} disabled={!canNext()} className="btn-primary disabled:opacity-40">Siguiente</button>
             ) : (
-              <button onClick={confirmar} disabled={saving} className="btn-primary disabled:opacity-40">{saving ? "Guardando..." : "Confirmar y enviar por WhatsApp"} <HeartIcon className="h-4 w-4" /></button>
+              <button onClick={confirmar} disabled={saving} className="btn-primary disabled:opacity-40">{saving ? "Reservando..." : "Reservar turno"} <HeartIcon className="h-4 w-4" /></button>
             )}
           </div>
         </div>
       </div>
+      {showSenia && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-plum/40 backdrop-blur-sm" onClick={() => setShowSenia(false)}></div>
+          <div className="relative w-full max-w-lg card-soft p-6 sm:p-8 flex flex-col gap-5">
+            <div className="flex flex-col items-center text-center gap-2">
+              <span className="inline-flex items-center gap-2 rounded-pill border border-violet/40 px-4 py-1 text-[10px] uppercase tracking-[0.4em] text-violet-deep">Seña requerida</span>
+              <h3 className="font-display text-2xl sm:text-3xl text-plum">{seniaConfig.titulo}</h3>
+            </div>
+            <div className="rounded-card border border-pink-soft bg-white/70 p-5 flex flex-col gap-3 text-center">
+              <p className="text-sm text-plum-light">Tu turno</p>
+              <p className="text-plum">{service?.name}</p>
+              <p className="text-plum-light">{fecha} a las {hora} · {nombre}</p>
+              <div className="mt-2 flex flex-col items-center gap-1">
+                <p className="text-sm text-plum-light">Seña a abonar (50%)</p>
+                <p className="text-3xl font-display text-plum">${seniaAmount}</p>
+                <p className="text-xs text-plum-light">Valor total: {service?.price}</p>
+              </div>
+              <div className="mt-3 rounded-pill border border-violet/50 px-4 py-2">
+                <p className="text-xs uppercase tracking-[0.3em] text-violet-deep">Alias para transferencia</p>
+                <p className="mt-1 text-lg text-plum select-all">{seniaConfig.alias}</p>
+              </div>
+            </div>
+            <p className="text-sm text-plum-light text-center">{seniaConfig.texto}</p>
+            <p className="text-xs text-center text-plum-light">El turno queda reservado por 10 minutos. Si no se recibe la seña en ese tiempo, se libera automáticamente.</p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button onClick={() => setShowSenia(false)} className="btn-secondary">Entendido</button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

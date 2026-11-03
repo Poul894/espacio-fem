@@ -46,9 +46,13 @@ const Admin = () => {
   });
   const [savingAvail, setSavingAvail] = useState(false);
 
-  const [videos, setVideos] = useState([]);
-  const [newVideo, setNewVideo] = useState("");
-  const [savingVideos, setSavingVideos] = useState(false);
+  const [seniaConfig, setSeniaConfig] = useState({
+    alias: "CAMBIAR_ALIAS_AQUI",
+    titulo: "Seña para reservar tu turno",
+    texto: "Para confirmar tu turno debés enviar el 50% del valor por transferencia al siguiente alias. Si no se recibe la seña dentro de los próximos 10 minutos, el turno se libera automáticamente.",
+    mostrar_whatsapp: false
+  });
+  const [savingSenia, setSavingSenia] = useState(false);
 
   const [clients, setClients] = useState([]);
   const [loadingClients, setLoadingClients] = useState(false);
@@ -119,8 +123,8 @@ const Admin = () => {
         if (row.key === "availability" && row.value) {
           setAvailability((prev) => ({ ...prev, ...row.value }));
         }
-        if (row.key === "videos" && Array.isArray(row.value)) {
-          setVideos(row.value);
+        if (row.key === "senia" && row.value) {
+          setSeniaConfig((prev) => ({ ...prev, ...row.value }));
         }
       }
     }
@@ -144,7 +148,11 @@ const Admin = () => {
 
   const updateStatus = async (id, status) => {
     if (!hasSupabase || !supabase) return;
-    await supabase.from("bookings").update({ status }).eq("id", id);
+    if (status === "confirmed") {
+      await supabase.from("bookings").update({ status, confirmed_at: new Date().toISOString() }).eq("id", id);
+    } else {
+      await supabase.from("bookings").update({ status }).eq("id", id);
+    }
     loadBookings();
   };
 
@@ -156,22 +164,12 @@ const Admin = () => {
     alert("Disponibilidad guardada");
   };
 
-  const saveVideos = async () => {
+  const saveSenia = async () => {
     if (!hasSupabase || !supabase) return;
-    setSavingVideos(true);
-    await supabase.from("settings").upsert({ key: "videos", value: videos, updated_at: new Date().toISOString() });
-    setSavingVideos(false);
-    alert("Videos guardados");
-  };
-
-  const addVideo = () => {
-    if (!newVideo.trim()) return;
-    setVideos((prev) => [...prev, { id: Date.now().toString(), url: newVideo.trim() }]);
-    setNewVideo("");
-  };
-
-  const removeVideo = (id) => {
-    setVideos((prev) => prev.filter((v) => v.id !== id));
+    setSavingSenia(true);
+    await supabase.from("settings").upsert({ key: "senia", value: seniaConfig, updated_at: new Date().toISOString() });
+    setSavingSenia(false);
+    alert("Datos de seña guardados");
   };
 
   const toggleDay = (dayId) => {
@@ -312,7 +310,7 @@ const Admin = () => {
           <button onClick={() => setTab("agenda")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "agenda" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Agenda</button>
           <button onClick={() => setTab("clientes")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "clientes" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Clientes / Fichas</button>
           <button onClick={() => setTab("disponibilidad")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "disponibilidad" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Modificar turnos disponibles</button>
-          <button onClick={() => setTab("videos")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "videos" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Videos del home</button>
+          <button onClick={() => setTab("senia")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "senia" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Seña</button>
         </div>
       </header>
 
@@ -504,27 +502,26 @@ const Admin = () => {
           </section>
         )}
 
-        {tab === "videos" && (
-          <section className="card-soft p-6 flex flex-col gap-6">
+        {tab === "senia" && (
+          <section className="card-soft p-6 flex flex-col gap-6 max-w-3xl">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <h2 className="font-display text-2xl text-plum">Videos para mostrar en el home</h2>
-                <p className="text-sm text-plum-light">Agregá URLs de YouTube (se mostrarán en la sección de videos)</p>
+                <h2 className="font-display text-2xl text-plum">Configuración de seña</h2>
+                <p className="text-sm text-plum-light">Alias para transferencia y texto que ve el cliente al reservar</p>
               </div>
-              <button onClick={saveVideos} disabled={savingVideos} className="btn-primary disabled:opacity-40">{savingVideos ? "Guardando..." : "Guardar videos"}</button>
+              <button onClick={saveSenia} disabled={savingSenia} className="btn-primary disabled:opacity-40">{savingSenia ? "Guardando..." : "Guardar seña"}</button>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <input value={newVideo} onChange={(e) => setNewVideo(e.target.value)} placeholder="https://www.youtube.com/watch?v=..." className="flex-1 min-w-[260px] rounded-pill border border-pink-soft px-4 py-2 bg-white/80" />
-              <button onClick={addVideo} className="btn-secondary">Agregar video</button>
-            </div>
-            <div className="grid gap-3">
-              {videos.map((v) => (
-                <div key={v.id} className="rounded-card border border-pink-soft/40 bg-white/70 p-4 flex flex-wrap items-center justify-between gap-3">
-                  <p className="text-sm text-plum-light break-all">{v.url}</p>
-                  <button onClick={() => removeVideo(v.id)} className="btn-secondary">Quitar</button>
-                </div>
-              ))}
-              {videos.length === 0 && <p className="text-plum-light">No hay videos cargados. Agregá al menos uno para mostrarlos en la home.</p>}
+            <div className="grid gap-4">
+              <label className="flex flex-col gap-1 text-sm text-plum-light">Alias (CBU/Alias)
+                <input value={seniaConfig.alias} onChange={(e) => setSeniaConfig({ ...seniaConfig, alias: e.target.value })} className="rounded-pill border border-pink-soft px-4 py-2 bg-white/80" />
+              </label>
+              <label className="flex flex-col gap-1 text-sm text-plum-light">Título del modal
+                <input value={seniaConfig.titulo} onChange={(e) => setSeniaConfig({ ...seniaConfig, titulo: e.target.value })} className="rounded-pill border border-pink-soft px-4 py-2 bg-white/80" />
+              </label>
+              <label className="flex flex-col gap-1 text-sm text-plum-light">Texto informativo
+                <textarea value={seniaConfig.texto} onChange={(e) => setSeniaConfig({ ...seniaConfig, texto: e.target.value })} rows={4} className="rounded-card border border-pink-soft px-4 py-2 bg-white/80" />
+              </label>
+              <p className="text-xs text-plum-light">El monto se calcula automáticamente como la mitad del valor del masaje seleccionado.</p>
             </div>
           </section>
         )}
