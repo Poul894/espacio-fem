@@ -1,15 +1,16 @@
+import { Link } from "react-router-dom";
 import { siteConfig } from "../data/config";
 import { HeartIcon, LotusIcon, WhatsAppIcon } from "./ui/Icons";
 
 const navFooter = [
-  { href: "#inicio", label: "Inicio" },
-  { href: "#tratamientos", label: "Tratamientos" },
-  { href: "#masajes", label: "Masajes" },
-  { href: "#beneficios", label: "Beneficios" },
-  { href: "#sobre-mi", label: "Sobre mí / El espacio" },
-  { href: "#preguntas-frecuentes", label: "Preguntas frecuentes" },
-  { href: "#contacto", label: "Contacto" },
-  { href: "#reservar", label: "Reservar turno" },
+  { href: "/#inicio", label: "Inicio" },
+  { href: "/#tratamientos", label: "Tratamientos" },
+  { href: "/#masajes", label: "Masajes" },
+  { href: "/#beneficios", label: "Beneficios" },
+  { href: "/#sobre-mi", label: "Sobre mí / El espacio" },
+  { href: "/#preguntas-frecuentes", label: "Preguntas frecuentes" },
+  { href: "/#contacto", label: "Contacto" },
+  { href: "/#reservar", label: "Reservar turno" },
 ];
 
 const ContactoFooter = () => {
@@ -29,9 +30,9 @@ const ContactoFooter = () => {
           <p className="text-sm uppercase tracking-[0.35em] text-violet-deep">Navegación</p>
           <div className="grid grid-cols-2 gap-2 text-sm text-plum-light">
             {navFooter.map((link) => (
-              <a key={link.href} href={link.href} className="hover:text-violet-deep">
+              <Link key={link.href} to={link.href} className="hover:text-violet-deep">
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

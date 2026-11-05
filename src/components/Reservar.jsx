@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { services } from "../data/services";
 import { siteConfig } from "../data/config";
 import { HeartIcon, LotusIcon } from "./ui/Icons";
@@ -20,6 +21,7 @@ const parsePrice = (priceStr) => {
 };
 
 const Reservar = () => {
+  const location = useLocation();
   const [step, setStep] = useState(0);
   const [serviceId, setServiceId] = useState(services[0]?.id || "");
   const [fecha, setFecha] = useState("");
@@ -131,6 +133,15 @@ const Reservar = () => {
     window.addEventListener("espaciofem:preselect", handler);
     return () => window.removeEventListener("espaciofem:preselect", handler);
   }, []);
+
+  useEffect(() => {
+    const id = location.state?.serviceId;
+    if (id && services.some((s) => s.id === id)) {
+      setServiceId(id);
+      setStep(0);
+      setHora("");
+    }
+  }, [location.state]);
 
   const today = getTodayISO();
   const horarios = availability.turnosPorHora || siteConfig.horarios.turnosPorHora;
@@ -258,7 +269,7 @@ const Reservar = () => {
       <LotusIcon className="decor-leaf -top-8 right-4 h-16 w-16 text-violet/40 sm:right-10" />
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
         <div className="section-title-wrap">
-          <h2 className="section-title">Reservar turno</h2>
+          <h2 className="section-title text-gold-light">Reservar turno</h2>
         </div>
         <div className="mt-6 text-center">
           <p className="text-plum-light">Elegí fecha, horario y completá tus datos. Te redirigimos a WhatsApp para confirmar.</p>
@@ -280,7 +291,7 @@ const Reservar = () => {
         <div className="card-soft mt-8 p-6 sm:p-8">
           {step === 0 && (
             <div className="flex flex-col gap-4">
-              <h3 className="font-display text-2xl text-plum">Paso 1: Elegí fecha</h3>
+              <h3 className="font-display text-2xl text-violet">Paso 1: Elegí fecha</h3>
               <input
                 type="date"
                 min={today}
@@ -300,7 +311,7 @@ const Reservar = () => {
           )}
           {step === 1 && (
             <div className="flex flex-col gap-4">
-              <h3 className="font-display text-2xl text-plum">Paso 2: Elegí horario</h3>
+              <h3 className="font-display text-2xl text-violet">Paso 2: Elegí horario</h3>
               <p className="text-sm text-plum-light">Fecha: <span className="text-plum">{fecha || "—"}</span></p>
               <div className="flex flex-wrap gap-2">
                 {horarios.map((h) => {
@@ -323,7 +334,7 @@ const Reservar = () => {
           )}
           {step === 2 && (
             <div className="flex flex-col gap-4">
-              <h3 className="font-display text-2xl text-plum">Paso 3: Tus datos</h3>
+              <h3 className="font-display text-2xl text-violet">Paso 3: Tus datos</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="flex flex-col gap-1 text-sm text-plum-light">
                   Nombre y apellido *
@@ -342,7 +353,7 @@ const Reservar = () => {
           )}
           {step === 3 && (
             <div className="flex flex-col gap-4">
-              <h3 className="font-display text-2xl text-plum">Paso 4: Resumen y confirmación</h3>
+              <h3 className="font-display text-2xl text-violet">Paso 4: Resumen y confirmación</h3>
               <div className="rounded-card border border-pink-soft bg-white/60 p-4 text-sm text-plum-light">
                 <div className="grid gap-2 sm:grid-cols-2">
                   <p><span className="text-plum">Masaje:</span> {service?.name}</p>
@@ -372,7 +383,7 @@ const Reservar = () => {
           <div className="relative w-full max-w-lg card-soft p-6 sm:p-8 flex flex-col gap-5">
             <div className="flex flex-col items-center text-center gap-2">
               <span className="inline-flex items-center gap-2 rounded-pill border border-violet/40 px-4 py-1 text-[10px] uppercase tracking-[0.4em] text-violet-deep">Seña requerida</span>
-              <h3 className="font-display text-2xl sm:text-3xl text-plum">{seniaConfig.titulo}</h3>
+              <h3 className="font-display text-2xl sm:text-3xl text-violet">{seniaConfig.titulo}</h3>
             </div>
             <div className="rounded-card border border-pink-soft bg-white/70 p-5 flex flex-col gap-3 text-center">
               <p className="text-sm text-plum-light">Tu turno</p>

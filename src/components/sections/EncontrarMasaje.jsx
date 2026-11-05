@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { services } from "../../data/services";
 import { HeartIcon } from "../ui/Icons";
 
@@ -13,15 +14,6 @@ const EncontrarMasaje = () => {
   const [selected, setSelected] = useState(null);
 
   const results = selected ? services.filter((s) => selected.match.includes(s.id)) : [];
-
-  const handleReservar = (service) => {
-    if (typeof window === "undefined") return;
-    window.dispatchEvent(new CustomEvent("espaciofem:preselect", { detail: { serviceId: service.id } }));
-    const el = document.getElementById("reservar");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
 
   const consultar = () => {
     const base = "https://wa.me/5491151354124";
@@ -67,7 +59,7 @@ const EncontrarMasaje = () => {
                         </p>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        <button onClick={() => handleReservar(s)} className="btn-primary">Reservar</button>
+                        <Link to={`/tratamientos/${s.id}`} className="btn-primary">Ver detalle</Link>
                         <button onClick={consultar} className="btn-secondary">Consultar por WhatsApp</button>
                       </div>
                     </div>

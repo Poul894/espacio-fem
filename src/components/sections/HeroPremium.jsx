@@ -4,7 +4,7 @@ const HeroPremium = () => {
       <div className="absolute inset-0 -z-10">
         <video
           className="h-full w-full object-cover object-center"
-          src="/videos/hero-bg.mp4"
+          src="/videos/hero-portada.mp4"
           autoPlay
           muted
           loop
