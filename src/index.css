@@ -162,6 +162,46 @@ img {
     outline-offset: 2px;
   }
 
+  .btn-hero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    height: 2.25rem;
+    border-radius: var(--radius-pill);
+    padding: 0 1.25rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-plum);
+    background: rgba(255, 252, 250, 0.55);
+    border: 1px solid rgba(81, 38, 83, 0.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: all 250ms ease;
+  }
+
+  .btn-hero:hover {
+    color: var(--color-cream-50);
+    background: linear-gradient(135deg, rgba(148, 87, 162, 1) 0%, rgba(81, 38, 83, 1) 100%);
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-button);
+  }
+
+  .btn-hero--filled {
+    color: var(--color-cream-50);
+    background: linear-gradient(135deg, rgba(148, 87, 162, 1) 0%, rgba(81, 38, 83, 1) 100%);
+    border-color: transparent;
+    box-shadow: var(--shadow-button);
+  }
+
+  .btn-hero--filled:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 50px -20px rgba(81, 38, 83, 0.9);
+  }
+
   .section-title-wrap {
     display: flex;
     justify-content: center;

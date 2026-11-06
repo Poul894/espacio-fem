@@ -9,7 +9,7 @@ export const services = [
       "Un masaje pensado para las zonas que más cargamos durante el día: espalda, cervicales, hombros y lumbar. Combinamos maniobras suaves y profundas para aflojar los nudos, descontracturar y devolverle movimiento a tu cuerpo.",
     duration: "Consultar",
     price: "$25.000",
-    image: "/assets/espalda-cervical-v2.png",
+    image: "/assets/masaje-manos.jpg",
     zones: ["Espalda alta", "Cervicales", "Hombros", "Zona lumbar"],
     benefits: [
       "Alivia tensiones y contracturas",
@@ -45,7 +45,7 @@ export const services = [
       "Una versión más completa del trabajo de espalda, que suma brazos para liberar la tensión que se acumula por gestos repetitivos, cargas o posturas sostenidas. Ideal si sentís el cuerpo pesado y necesitás aflojar de punta a punta.",
     duration: "Consultar",
     price: "$24.000",
-    image: "/assets/espalda-completa-v2.png",
+    image: "/assets/hero-spa.jpg",
     zones: ["Espalda completa", "Cervicales", "Hombros", "Brazos", "Zona lumbar"],
     benefits: [
       "Libera la tensión de espalda y brazos",
@@ -81,7 +81,7 @@ export const services = [
       "Un masaje descontracturante y revitalizante para piernas cansadas. Recorre tobillos, pantorrillas y muslos con maniobras que ayudan a estimular la circulación y devolver la sensación de liviandad.",
     duration: "Consultar",
     price: "$20.000",
-    image: "/assets/piernas-completa-v2.png",
+    image: "/assets/masaje-manos.jpg",
     zones: ["Tobillos", "Pantorrillas", "Muslos", "Pies"],
     benefits: [
       "Alivia el cansancio y la pesadez",
@@ -117,7 +117,7 @@ export const services = [
       "Un trabajo más profundo que combina el masaje completo de piernas con maniobras específicas en zona glútea y el recorrido de la ciática. Pensado para aflojar tensiones que se sienten desde la cadera hasta la pierna.",
     duration: "Consultar",
     price: "$28.000",
-    image: "/assets/piernas-ciatica-v2.png",
+    image: "/assets/hero-spa.jpg",
     zones: ["Zona glútea", "Cadera", "Muslos", "Pantorrillas"],
     benefits: [
       "Trabajo focalizado en zona glútea y pierna",
@@ -153,7 +153,7 @@ export const services = [
       "Una experiencia integral que recorre todo el cuerpo con maniobras relajantes y descontracturantes. Un tiempo para bajar el ritmo, soltar tensiones y renovar tu energía de punta a punta.",
     duration: "Consultar",
     price: "$28.000",
-    image: "/assets/cuerpo-completo-v2.png",
+    image: "/assets/masaje-manos.jpg",
     zones: ["Espalda", "Piernas", "Brazos", "Cuello y hombros"],
     benefits: [
       "Relaja todo el cuerpo",

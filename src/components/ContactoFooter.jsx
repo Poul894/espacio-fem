@@ -3,14 +3,13 @@ import { siteConfig } from "../data/config";
 import { HeartIcon, LotusIcon, WhatsAppIcon } from "./ui/Icons";
 
 const navFooter = [
-  { href: "/#inicio", label: "Inicio" },
-  { href: "/#tratamientos", label: "Tratamientos" },
-  { href: "/#masajes", label: "Masajes" },
-  { href: "/#beneficios", label: "Beneficios" },
-  { href: "/#sobre-mi", label: "Sobre mí / El espacio" },
-  { href: "/#preguntas-frecuentes", label: "Preguntas frecuentes" },
-  { href: "/#contacto", label: "Contacto" },
-  { href: "/#reservar", label: "Reservar turno" },
+  { href: "/", label: "Inicio" },
+  { href: "/tratamientos", label: "Tratamientos" },
+  { href: "/beneficios", label: "Beneficios" },
+  { href: "/sobre-nosotros", label: "Sobre nosotros" },
+  { href: "/preguntas-frecuentes", label: "Preguntas frecuentes" },
+  { href: "/contacto", label: "Contacto" },
+  { href: "/reservar", label: "Reservar turno" },
 ];
 
 const ContactoFooter = () => {

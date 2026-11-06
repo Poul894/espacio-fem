@@ -33,7 +33,7 @@ const Tratamiento = () => {
 
   const reservar = () => {
     if (!service) return;
-    navigate("/", { state: { serviceId: service.id, scrollTo: "reservar" } });
+    navigate("/reservar", { state: { serviceId: service.id } });
   };
 
   if (!service) {
@@ -45,7 +45,7 @@ const Tratamiento = () => {
             <LotusIcon className="mx-auto h-12 w-12 text-violet/60" />
             <h1 className="mt-4 font-display text-3xl text-plum">No encontramos ese tratamiento</h1>
             <p className="mt-3 text-sm text-plum-light">Puede que el enlace haya cambiado. Volvé a ver todos los tratamientos disponibles.</p>
-            <Link to="/#tratamientos" className="btn-primary mt-6">Ver tratamientos</Link>
+            <Link to="/tratamientos" className="btn-primary mt-6">Ver tratamientos</Link>
           </div>
         </main>
         <ContactoFooter />
@@ -67,7 +67,7 @@ const Tratamiento = () => {
             <nav aria-label="Migas de pan" className="mb-6 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-plum-light">
               <Link to="/" className="transition-colors hover:text-violet-deep">Inicio</Link>
               <span aria-hidden="true">/</span>
-              <Link to="/#tratamientos" className="transition-colors hover:text-violet-deep">Tratamientos</Link>
+              <Link to="/tratamientos" className="transition-colors hover:text-violet-deep">Tratamientos</Link>
               <span aria-hidden="true">/</span>
               <span className="text-violet-deep">{service.name}</span>
             </nav>
@@ -203,7 +203,7 @@ const Tratamiento = () => {
               <p className="relative mt-3 text-plum-light">Elegí día y horario para tu masaje y confirmá tu turno en pocos pasos.</p>
               <div className="relative mt-6 flex flex-wrap justify-center gap-3">
                 <button onClick={reservar} className="btn-primary">Reservar turno</button>
-                <Link to="/#tratamientos" className="btn-secondary">Ver otros tratamientos</Link>
+                <Link to="/tratamientos" className="btn-secondary">Ver otros tratamientos</Link>
               </div>
             </div>
           </div>

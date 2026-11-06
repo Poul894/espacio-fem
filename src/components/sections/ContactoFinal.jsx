@@ -1,22 +1,19 @@
+import { Link } from "react-router-dom";
 import { siteConfig } from "../../data/config";
 import { HeartIcon, WhatsAppIcon } from "../ui/Icons";
 
 const ContactoFinal = () => {
   return (
-    <section id="contacto" className="relative py-16 sm:py-20 lg:py-24">
+    <section className="relative pb-16 sm:pb-20 lg:pb-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="card-soft overflow-hidden">
           <div className="grid gap-10 p-6 sm:p-10 lg:grid-cols-2 lg:items-center">
             <div>
-              <span className="mb-4 inline-flex items-center gap-2 rounded-pill border border-violet/40 px-5 py-1 text-xs uppercase tracking-[0.4em] text-violet-deep">
-                Contacto
-              </span>
-              <h2 className="font-display text-3xl text-plum sm:text-4xl lg:text-5xl">¿Listo para tu momento de bienestar?</h2>
-              <p className="mt-4 text-base text-plum-light sm:text-lg">
+              <p className="text-base text-plum-light sm:text-lg">
                 Reservá tu turno o consultá disponibilidad por WhatsApp. Te respondemos con gusto.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#reservar" className="btn-primary">Quiero reservar mi turno</a>
+                <Link to="/reservar" className="btn-primary">Quiero reservar mi turno</Link>
                 <a href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary">
                   <WhatsAppIcon className="h-5 w-5" />
                   Consultar por WhatsApp

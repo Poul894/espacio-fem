@@ -7,13 +7,10 @@ const SobreEspacio = () => {
         <div className="relative">
           <div className="absolute -inset-8 rounded-[40px] bg-gradient-to-br from-lavender/25 to-pink-soft/20 blur-3xl" aria-hidden="true"></div>
           <div className="relative overflow-hidden rounded-[40px] border border-white/80 shadow-soft">
-            <img src="/assets/flyer-beneficios.jpeg" alt="Ambiente cálido de Espacio Fem" className="h-[420px] w-full object-cover sm:h-[520px]" loading="lazy" />
+            <img src="/assets/masaje-manos.jpg" alt="Ambiente cálido de Espacio Fem" className="h-[420px] w-full object-cover sm:h-[520px]" loading="lazy" />
           </div>
         </div>
         <div>
-          <span className="mb-4 inline-flex items-center gap-2 rounded-pill border border-violet/40 px-5 py-1 text-xs uppercase tracking-[0.4em] text-violet-deep">
-            Conocé Espacio Fem
-          </span>
           <h2 className="font-display text-3xl text-plum sm:text-4xl lg:text-5xl">Un espacio pensado para vos</h2>
           <p className="mt-6 text-base text-plum-light sm:text-lg">
             Espacio Fem es un refugio íntimo, cálido y exclusivo para mujeres, donde cada masaje está pensado para que puedas desconectar del ritmo diario y dedicarte un momento solo para vos.

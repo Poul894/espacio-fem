@@ -268,10 +268,7 @@ const Reservar = () => {
     <section id="reservar" className="relative py-16 sm:py-20">
       <LotusIcon className="decor-leaf -top-8 right-4 h-16 w-16 text-violet/40 sm:right-10" />
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
-        <div className="section-title-wrap">
-          <h2 className="section-title text-gold-light">Reservar turno</h2>
-        </div>
-        <div className="mt-6 text-center">
+        <div className="text-center">
           <p className="text-plum-light">Elegí fecha, horario y completá tus datos. Te redirigimos a WhatsApp para confirmar.</p>
         </div>
         <div className="mt-4 text-center text-sm text-plum-light">

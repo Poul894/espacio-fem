@@ -11,19 +11,10 @@ const icons = [
 
 const BeneficiosPremium = () => {
   return (
-    <section id="beneficios" className="relative py-14 sm:py-16 lg:py-20">
+    <section className="relative pb-14 sm:pb-16 lg:pb-20">
       <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top,rgba(217,197,232,0.16),transparent_70%)] -z-10"></div>
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6">
-        <div className="flex flex-col items-center text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-pill border border-violet/50 px-5 py-1 text-[10px] uppercase tracking-[0.4em] text-violet-deep shadow-[0_12px_40px_-18px_rgba(148,87,162,0.8)]">
-            Beneficios del bienestar
-          </span>
-          <h2 className="font-display text-[clamp(2.2rem,5vw,3.8rem)] leading-tight text-plum drop-shadow-[0_18px_50px_rgba(81,38,83,0.12)]">Tu camino al bienestar integral</h2>
-          <p className="mt-3 max-w-3xl text-base text-plum-light sm:text-lg">
-            Descubrí la importancia de los masajes como un espacio de cuidado, relajación y autocuidado.
-          </p>
-        </div>
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {benefits.map((benefit, idx) => (
             <article key={benefit.id} className="card-soft reveal flex flex-col gap-4 p-6 sm:p-7">
               <div className="flex items-center gap-4">

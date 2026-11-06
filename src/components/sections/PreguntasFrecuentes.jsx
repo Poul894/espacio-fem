@@ -24,15 +24,9 @@ const PreguntasFrecuentes = () => {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="preguntas-frecuentes" className="relative py-16 sm:py-20">
+    <section className="relative pb-16 sm:pb-20">
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
-        <div className="flex flex-col items-center text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-pill border border-violet/40 px-5 py-1 text-xs uppercase tracking-[0.4em] text-violet-deep">
-            Preguntas frecuentes
-          </span>
-          <h2 className="font-display text-3xl text-plum sm:text-4xl">Dudas habituales</h2>
-        </div>
-        <div className="mt-10 flex flex-col gap-3">
+        <div className="flex flex-col gap-3">
           {faqs.map((faq, idx) => (
             <article key={idx} className="card-soft overflow-hidden">
               <button

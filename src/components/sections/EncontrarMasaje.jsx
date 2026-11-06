@@ -70,7 +70,7 @@ const EncontrarMasaje = () => {
             <div className="relative">
               <div className="absolute -inset-6 rounded-[40px] bg-gradient-to-br from-pink-soft/25 to-lavender/20 blur-3xl" aria-hidden="true"></div>
               <div className="relative overflow-hidden rounded-[40px]">
-                <img src="/assets/flyer-beneficios.jpeg" alt="Bienestar y relajación" className="h-[420px] w-full object-cover" loading="lazy" />
+                <img src="/assets/hero-spa.jpg" alt="Bienestar y relajación" className="h-[420px] w-full object-cover" loading="lazy" />
               </div>
             </div>
           </div>
