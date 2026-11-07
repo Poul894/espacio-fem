@@ -266,7 +266,7 @@ const Reservar = () => {
   };
 
   return (
-    <section id="reservar" className="relative py-16 sm:py-20">
+    <section id="reservar" className="relative pt-4 pb-16 sm:pt-6 sm:pb-20">
       <LotusIcon className="decor-leaf -top-8 right-4 h-16 w-16 text-violet/40 sm:right-10" />
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
         <div className="text-center">

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { LotusIcon } from "./Icons";
 
-const PageHero = ({ eyebrow, title, lead, crumb, children }) => {
+const PageHero = ({ eyebrow, title, lead, crumb, children, tight = false }) => {
   return (
-    <section className="relative overflow-hidden pt-28 pb-14 sm:pt-32 sm:pb-16">
+    <section className={`relative overflow-hidden ${tight ? "pt-20 pb-6 sm:pt-24 sm:pb-8" : "pt-28 pb-14 sm:pt-32 sm:pb-16"}`}>
       <div
         className="absolute -top-24 right-[-10%] h-[420px] w-[420px] rounded-full bg-gradient-to-br from-pink-soft/30 to-lavender/25 blur-3xl"
         aria-hidden="true"

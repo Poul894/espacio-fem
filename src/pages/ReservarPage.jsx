@@ -19,9 +19,10 @@ const ReservarPage = () => {
           eyebrow="Reservar turno"
           title="Tu momento de bienestar te espera"
           lead="Elegí fecha, horario y completá tus datos. Te confirmamos por WhatsApp."
+          tight
         />
-        <PasosReserva />
         <Reservar />
+        <PasosReserva />
       </main>
       <ContactoFooter />
       <WhatsAppFloat />
