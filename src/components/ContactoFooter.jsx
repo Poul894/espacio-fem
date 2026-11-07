@@ -39,7 +39,7 @@ const ContactoFooter = () => {
           <p className="text-sm uppercase tracking-[0.35em] text-violet-deep">Contacto</p>
           <a href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-whatsapp">
             <WhatsAppIcon className="h-5 w-5" />
-            WhatsApp {siteConfig.whatsappNumber.replace("549", "15")}
+            WhatsApp {siteConfig.whatsappNumber.replace("549", "")}
           </a>
           <p className="text-xs text-plum-light">{siteConfig.addressNote}</p>
         </div>

@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Espacio Fem",
-  slogan: "Un refugio para tu bienestar y calma",
+  slogan: "Un espacio para tu bienestar y calma ♡",
   phrase: "Tu bienestar, mi prioridad",
   closingPhrase: "Tu momento también importa",
   exclusive: "Espacio exclusivo para mujeres",

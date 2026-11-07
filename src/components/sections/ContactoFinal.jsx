@@ -23,7 +23,7 @@ const ContactoFinal = () => {
                 <div className="rounded-card border border-pink-soft/40 bg-cream-50/80 p-4">
                   <p className="text-sm uppercase tracking-[0.35em] text-violet-deep">WhatsApp</p>
                   <a href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer" className="mt-2 block text-lg text-plum hover:text-violet-deep">
-                    {siteConfig.whatsappNumber.replace("549", "15")}
+                    {siteConfig.whatsappNumber.replace("549", "")}
                   </a>
                 </div>
                 <div className="rounded-card border border-pink-soft/40 bg-cream-50/80 p-4">

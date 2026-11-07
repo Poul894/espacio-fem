@@ -25,7 +25,6 @@ const HeroPremium = () => {
         <h1 className="font-display text-[clamp(2.1rem,5vw,3.6rem)] leading-tight text-plum drop-shadow-[0_8px_30px_rgba(255,252,250,0.6)]">
           {siteConfig.slogan}
         </h1>
-        <p className="mt-3 font-script text-2xl text-violet-deep sm:text-3xl">{siteConfig.phrase} ♡</p>
 
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
           <Link to="/reservar" className="btn-hero btn-hero--filled">
