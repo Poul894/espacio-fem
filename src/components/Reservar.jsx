@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { services } from "../data/services";
 import { siteConfig } from "../data/config";
 import { HeartIcon, LotusIcon } from "./ui/Icons";
 import { supabase, hasSupabase } from "../lib/supabase";
+import { useServices } from "../hooks/useServices";
 
 const steps = ["Elegir fecha", "Elegir horario", "Tus datos", "Confirmar"];
 
@@ -22,6 +22,7 @@ const parsePrice = (priceStr) => {
 
 const Reservar = () => {
   const location = useLocation();
+  const services = useServices();
   const [step, setStep] = useState(0);
   const [serviceId, setServiceId] = useState(services[0]?.id || "");
   const [fecha, setFecha] = useState("");

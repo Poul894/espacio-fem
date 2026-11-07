@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase, hasSupabase } from "../lib/supabase";
 import { HeartIcon } from "../components/ui/Icons";
+import { services as baseServices } from "../data/services";
+import { parsePriceNumber, formatPrice } from "../hooks/useServices";
 
 const getTodayISO = () => {
   const d = new Date();
@@ -53,6 +55,15 @@ const Admin = () => {
     mostrar_whatsapp: false
   });
   const [savingSenia, setSavingSenia] = useState(false);
+
+  const [precios, setPrecios] = useState(() => {
+    const initial = {};
+    baseServices.forEach((s) => {
+      initial[s.id] = parsePriceNumber(s.price);
+    });
+    return initial;
+  });
+  const [savingPrecios, setSavingPrecios] = useState(false);
 
   const [clients, setClients] = useState([]);
   const [loadingClients, setLoadingClients] = useState(false);
@@ -126,6 +137,9 @@ const Admin = () => {
         if (row.key === "senia" && row.value) {
           setSeniaConfig((prev) => ({ ...prev, ...row.value }));
         }
+        if (row.key === "precios" && row.value) {
+          setPrecios((prev) => ({ ...prev, ...row.value }));
+        }
       }
     }
   };
@@ -170,6 +184,14 @@ const Admin = () => {
     await supabase.from("settings").upsert({ key: "senia", value: seniaConfig, updated_at: new Date().toISOString() });
     setSavingSenia(false);
     alert("Datos de seña guardados");
+  };
+
+  const savePrecios = async () => {
+    if (!hasSupabase || !supabase) return;
+    setSavingPrecios(true);
+    await supabase.from("settings").upsert({ key: "precios", value: precios, updated_at: new Date().toISOString() });
+    setSavingPrecios(false);
+    alert("Precios guardados");
   };
 
   const toggleDay = (dayId) => {
@@ -310,6 +332,7 @@ const Admin = () => {
           <button onClick={() => setTab("agenda")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "agenda" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Agenda</button>
           <button onClick={() => setTab("clientes")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "clientes" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Clientes / Fichas</button>
           <button onClick={() => setTab("disponibilidad")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "disponibilidad" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Modificar turnos disponibles</button>
+          <button onClick={() => setTab("precios")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "precios" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Precios</button>
           <button onClick={() => setTab("senia")} className={`rounded-pill px-4 py-1.5 text-sm ${tab === "senia" ? "bg-violet text-cream-50" : "border border-violet/40 text-violet"}`}>Seña</button>
         </div>
       </header>
@@ -498,6 +521,37 @@ const Admin = () => {
                 })}
               </div>
               <p className="text-xs text-plum-light">Solo se van a mostrar al cliente los horarios que marques acá.</p>
+            </div>
+          </section>
+        )}
+
+        {tab === "precios" && (
+          <section className="card-soft p-6 flex flex-col gap-6 max-w-3xl">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h2 className="font-display text-2xl text-plum">Precios de los masajes</h2>
+                <p className="text-sm text-plum-light">Modificá el valor de cada tratamiento. Se actualiza en toda la web al guardar.</p>
+              </div>
+              <button onClick={savePrecios} disabled={savingPrecios} className="btn-primary disabled:opacity-40">{savingPrecios ? "Guardando..." : "Guardar precios"}</button>
+            </div>
+            <div className="flex flex-col gap-3">
+              {baseServices.map((s) => (
+                <div key={s.id} className="rounded-card border border-pink-soft/40 bg-white/70 p-4 flex flex-wrap items-center justify-between gap-4">
+                  <p className="text-plum">{s.name}</p>
+                  <label className="flex items-center gap-2 text-sm text-plum-light">
+                    $
+                    <input
+                      type="number"
+                      min="0"
+                      step="500"
+                      value={precios[s.id] ?? 0}
+                      onChange={(e) => setPrecios((prev) => ({ ...prev, [s.id]: Number(e.target.value) }))}
+                      className="w-32 rounded-pill border border-pink-soft px-4 py-2 bg-white/80 text-plum"
+                    />
+                    <span className="text-xs text-plum-light">({formatPrice(precios[s.id])})</span>
+                  </label>
+                </div>
+              ))}
             </div>
           </section>
         )}

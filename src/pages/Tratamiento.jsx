@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getServiceById, services } from "../data/services";
 import { siteConfig } from "../data/config";
+import { useServices } from "../hooks/useServices";
 import Header from "../components/Header";
 import ContactoFooter from "../components/ContactoFooter";
 import WhatsAppFloat from "../components/WhatsAppFloat";
@@ -22,7 +22,8 @@ const whatsappUrl = (service) => {
 const Tratamiento = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const service = getServiceById(id);
+  const services = useServices();
+  const service = services.find((s) => s.id === id);
 
   useEffect(() => {
     document.title = service ? `${service.name} | Espacio Fem` : "Tratamiento no encontrado | Espacio Fem";

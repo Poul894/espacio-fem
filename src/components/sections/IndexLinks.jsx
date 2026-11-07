@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ArrowRightIcon } from "../ui/Icons";
 
 const CalendarIcon = (props) => (
   <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -39,30 +40,35 @@ const sections = [
   {
     to: "/tratamientos",
     icon: SpaIcon,
+    image: "/assets/boton_1_masajes.png",
     title: "Tratamientos",
     text: "Masajes descontracturantes, relajantes y estéticos pensados para vos.",
   },
   {
     to: "/beneficios",
     icon: HeartbeatIcon,
+    image: "/assets/boton_2_bienestar.png",
     title: "Beneficios",
     text: "Por qué un masaje es mucho más que un momento de relax.",
   },
   {
     to: "/sobre-nosotros",
     icon: LeafPairIcon,
+    image: "/assets/boton_3_espacio.png",
     title: "Sobre nosotros",
     text: "Un refugio íntimo y cálido, exclusivo para mujeres.",
   },
   {
     to: "/preguntas-frecuentes",
     icon: QuestionIcon,
+    image: null,
     title: "Preguntas frecuentes",
     text: "Todo lo que necesitás saber antes de tu turno.",
   },
   {
     to: "/reservar",
     icon: CalendarIcon,
+    image: "/assets/boton_4_turnos.png",
     title: "Reservar turno",
     text: "Elegí día, horario y confirmá tu momento de bienestar.",
   },
@@ -72,19 +78,45 @@ const IndexLinks = () => {
   return (
     <section className="relative py-14 sm:py-16 lg:py-20">
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {sections.map(({ to, icon: Icon, title, text }) => (
-            <Link key={to} to={to} className="card-soft reveal group flex flex-col gap-4 p-6 sm:p-7">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-pink-soft/40 to-lavender/40 text-violet-deep shadow-[0_18px_50px_-20px_rgba(148,87,162,0.9)]">
-                <Icon className="h-6 w-6" />
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {sections.map(({ to, icon: Icon, image, title, text }) => (
+            <Link key={to} to={to} className="card-spa reveal group">
+              {image ? (
+                <div className="relative h-[42%] min-h-[170px] w-full overflow-hidden">
+                  <img
+                    src={image}
+                    alt={title}
+                    className="card-spa__img h-full w-full object-cover object-center"
+                    loading="lazy"
+                  />
+                  <svg
+                    className="absolute -bottom-px left-0 h-8 w-full text-cream-50 sm:h-10"
+                    viewBox="0 0 400 40"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 40 C 80 0, 160 40, 200 20 C 240 0, 320 40, 400 10 L 400 40 L 0 40 Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                <div className="px-6 pt-6 sm:px-7 sm:pt-7">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-pink-soft/40 to-lavender/40 text-violet-deep shadow-[0_18px_50px_-20px_rgba(148,87,162,0.9)]">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex flex-1 flex-col gap-2 p-6 pt-5 sm:p-7 sm:pt-5">
+                <h2 className="font-display text-xl text-violet-deep">{title}</h2>
+                <p className="text-sm text-violet-muted">{text}</p>
+                <span className="btn-card mt-auto w-fit">
+                  Descubrir más
+                  <ArrowRightIcon className="h-3.5 w-3.5" />
+                </span>
               </div>
-              <div>
-                <h2 className="font-display text-xl text-plum">{title}</h2>
-                <p className="mt-2 text-sm text-plum-light">{text}</p>
-              </div>
-              <span className="mt-auto inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-violet transition-colors group-hover:text-violet-deep">
-                Descubrir más →
-              </span>
             </Link>
           ))}
         </div>

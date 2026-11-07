@@ -5,14 +5,13 @@ import ContactoFooter from "../components/ContactoFooter";
 import WhatsAppFloat from "../components/WhatsAppFloat";
 import MobileBottomBar from "../components/layout/MobileBottomBar";
 import EncontrarMasaje from "../components/sections/EncontrarMasaje";
-import { services } from "../data/services";
-import { HeartIcon } from "../components/ui/Icons";
+import { useServices } from "../hooks/useServices";
+import { ArrowRightIcon, HeartIcon } from "../components/ui/Icons";
 import { useScrollReveal } from "../hooks/useScrollReveal";
-
-const accents = ["from-pink-soft/50 to-pink/30", "from-lavender/50 to-violet/25", "from-gold-light/60 to-gold/25"];
 
 const Tratamientos = () => {
   useScrollReveal();
+  const services = useServices();
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">
@@ -27,24 +26,44 @@ const Tratamientos = () => {
 
         <section className="relative pb-16 sm:pb-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {services.map((service, idx) => (
-                <article key={service.id} className="card-soft reveal flex flex-col overflow-hidden">
-                  <div className={`h-2 w-full bg-gradient-to-r ${accents[idx % accents.length]}`} />
-                  <div className="flex flex-1 flex-col gap-4 p-6 sm:p-7">
+                <article key={service.id} className="card-spa reveal">
+                  <div className="relative h-[42%] min-h-[180px] w-full overflow-hidden">
+                    <img
+                      src={service.image}
+                      alt={service.name}
+                      className="card-spa__img h-full w-full object-cover object-center"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-plum/35 via-plum/5 to-transparent" />
+                    <svg
+                      className="absolute -bottom-px left-0 h-8 w-full text-cream-50 sm:h-10"
+                      viewBox="0 0 400 40"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M0 40 C 80 0, 160 40, 200 20 C 240 0, 320 40, 400 10 L 400 40 L 0 40 Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+
+                  <div className="flex flex-1 flex-col gap-4 p-6 pt-5 sm:p-7 sm:pt-5">
                     <div className="flex items-start justify-between gap-3">
-                      <span className="font-display text-3xl text-violet/35">{String(idx + 1).padStart(2, "0")}</span>
-                      <span className="rounded-pill border border-violet/30 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-violet-deep">
+                      <span className="font-display text-3xl text-violet/30">{String(idx + 1).padStart(2, "0")}</span>
+                      <span className="rounded-pill border border-violet/30 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-violet-muted">
                         {service.duration === "Consultar" ? "Consultar duración" : service.duration}
                       </span>
                     </div>
 
-                    <h2 className="font-display text-2xl text-plum">{service.name}</h2>
-                    <p className="text-sm text-plum-light">{service.tagline}</p>
+                    <h2 className="font-display text-2xl text-violet-deep">{service.name}</h2>
+                    <p className="font-body text-sm text-violet-muted">{service.tagline}</p>
 
                     <div className="flex flex-wrap gap-2">
                       {service.short.map((s) => (
-                        <span key={s} className="inline-flex items-center gap-1.5 rounded-pill bg-cream-100/80 px-3 py-1 text-[11px] text-plum-light">
+                        <span key={s} className="inline-flex items-center gap-1.5 rounded-pill bg-cream-100/80 px-3 py-1 text-[11px] font-body text-violet-muted">
                           <HeartIcon className="h-3 w-3 text-pink" />
                           {s}
                         </span>
@@ -52,9 +71,10 @@ const Tratamientos = () => {
                     </div>
 
                     <div className="mt-auto flex items-center justify-between pt-2">
-                      <p className="font-display text-xl text-plum">{service.price}</p>
-                      <Link to={`/tratamientos/${service.id}`} className="btn-secondary px-5 py-2 text-xs">
-                        Ver detalle →
+                      <p className="font-display text-xl text-violet-deep">{service.price}</p>
+                      <Link to={`/tratamientos/${service.id}`} className="btn-card">
+                        Ver detalle
+                        <ArrowRightIcon className="h-3.5 w-3.5" />
                       </Link>
                     </div>
                   </div>

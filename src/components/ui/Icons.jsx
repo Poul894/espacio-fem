@@ -27,3 +27,9 @@ export const HeartIcon = ({ className = "h-5 w-5" }) => (
     <path d="M12 21s-6.7-4.35-9.33-8.5C.5 9.24 2.42 5 6.5 5c2.05 0 3.54 1.1 4.5 2.09C11.96 6.1 13.45 5 15.5 5c4.08 0 6 4.24 3.83 7.5C18.7 16.65 12 21 12 21z"/>
   </svg>
 );
+
+export const ArrowRightIcon = ({ className = "h-4 w-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </svg>
+);
